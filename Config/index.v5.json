@@ -1,0 +1,341 @@
+{
+  "mappings": {
+    "restaurants": {
+      "properties": {
+        "address": {
+          "properties": {
+            "city": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "line1": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "text",
+                  "analyzer": "lowercase_keyword"
+                }
+              }
+            },
+            "line2": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "text",
+                  "analyzer": "lowercase_keyword"
+                }
+              }
+            },
+            "postCode": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 20
+                }
+              }
+            },
+            "state": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 10
+                }
+              }
+            }
+          }
+        },
+        "contactInformation": {
+          "type": "text",
+          "fields": {
+            "only_number_phrase": {
+              "type": "text",
+              "analyzer": "only_number_phrase"
+            }
+          },
+          "analyzer": "only_numbers"
+        },
+        "description": {
+          "type": "text",
+          "analyzer": "word_split_lowercase"
+        },
+        "diningStyles": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "features": {
+          "properties": {
+            "bar": {
+              "type": "boolean"
+            },
+            "counter": {
+              "type": "boolean"
+            },
+            "highTop": {
+              "type": "boolean"
+            },
+            "outdoor": {
+              "type": "boolean"
+            },
+            "subtype": {
+              "type": "keyword",
+              "ignore_above": 256
+            },
+            "pickupEnabled": {
+              "type": "boolean"
+            }
+          }
+        },
+        "hasTakeout": {
+          "type": "boolean"
+        },
+        "isPinned": {
+          "type": "boolean"
+        },
+        "isPromoted": {
+          "type": "boolean"
+        },
+        "location": {
+          "type": "geo_point"
+        },
+        "name": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            },
+            "lowercase_ends_with_text": {
+              "type": "text",
+              "analyzer": "reverse_edge_ngram_analyzer"
+            },
+            "lowercase_exact_keyword": {
+              "type": "text",
+              "analyzer": "lowercase_keyword"
+            },
+            "lowercase_starts_with_text": {
+              "type": "text",
+              "analyzer": "edge_ngram_analyzer"
+            }
+          },
+          "analyzer": "ngram_analyzer"
+        },
+        "neighborhood": {
+          "type": "keyword",
+          "ignore_above": 256
+        },
+        "orderOnlineLink": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 500
+            }
+          }
+        },
+        "photos": {
+          "properties": {
+            "legacy": {
+              "properties": {
+                "url": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 500
+                    }
+                  }
+                },
+                "width": {
+                  "type": "long"
+                }
+              }
+            },
+            "medium": {
+              "properties": {
+                "url": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 500
+                    }
+                  }
+                },
+                "width": {
+                  "type": "long"
+                }
+              }
+            },
+            "small": {
+              "properties": {
+                "url": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 500
+                    }
+                  }
+                },
+                "width": {
+                  "type": "long"
+                }
+              }
+            },
+            "xsmall": {
+              "properties": {
+                "url": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 500
+                    }
+                  }
+                },
+                "width": {
+                  "type": "long"
+                }
+              }
+            }
+          }
+        },
+        "primaryCuisine": {
+          "type": "keyword",
+          "ignore_above": 100
+        },
+        "profileLink": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 500
+            }
+          }
+        },
+        "published_on": {
+          "type": "date"
+        },
+        "statistics": {
+          "properties": {
+            "recentReservationCount": {
+              "type": "long"
+            },
+            "reviews": {
+              "properties": {
+                "allTimeTextReviewCount": {
+                  "type": "long"
+                },
+                "ratings": {
+                  "type": "float"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "settings": {
+    "index": {
+      "number_of_shards": "1",
+      "analysis": {
+        "filter": {
+          "non_number_remove": {
+            "pattern": "\\D+",
+            "type": "pattern_replace",
+            "replacement": ""
+          },
+          "substring": {
+            "type": "edge_ngram",
+            "min_gram": "2",
+            "max_gram": "25"
+          },
+          "extract_num": {
+            "type": "keep_types",
+            "types": [
+              "<NUM>"
+            ]
+          }
+        },
+        "analyzer": {
+          "ngram_analyzer": {
+            "filter": [
+              "lowercase"
+            ],
+            "tokenizer": "ngram_tokenizer"
+          },
+          "reverse_edge_ngram_analyzer": {
+            "filter": [
+              "lowercase",
+              "reverse",
+              "substring",
+              "reverse"
+            ],
+            "tokenizer": "keyword"
+          },
+          "only_number_phrase": {
+            "filter": [
+              "extract_num"
+            ],
+            "tokenizer": "standard"
+          },
+          "lowercase_keyword": {
+            "filter": [
+              "lowercase"
+            ],
+            "type": "custom",
+            "tokenizer": "keyword"
+          },
+          "only_numbers": {
+            "filter": [
+              "non_number_remove"
+            ],
+            "tokenizer": "keyword"
+          },
+          "word_split_lowercase": {
+            "filter": [
+              "word_delimiter",
+              "lowercase"
+            ],
+            "char_filter": [
+              "html_strip"
+            ],
+            "tokenizer": "keyword"
+          },
+          "edge_ngram_analyzer": {
+            "filter": [
+              "lowercase"
+            ],
+            "tokenizer": "edge_ngram_tokenizer"
+          }
+        },
+        "tokenizer": {
+          "edge_ngram_tokenizer": {
+            "type": "edge_ngram",
+            "min_gram": "2",
+            "max_gram": "25"
+          },
+          "ngram_tokenizer": {
+            "type": "ngram",
+            "min_gram": "2",
+            "max_gram": "25"
+          }
+        }
+      },
+      "number_of_replicas": "1"
+    }
+  }
+}
